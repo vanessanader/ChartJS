@@ -1,9 +1,4 @@
-﻿/*
- *Author: Iskandar Chacra
- *Since; 2016-10-10
- *Version: 1.0
- */
-using ChartJS.Models;
+﻿using ChartJS.Models;
 using ChartJS.Models.Datasets;
 using ChartJS.Services.DefaultValuesGenerator;
 using ChartJS.Services.TemplateWriter;
