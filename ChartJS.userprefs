@@ -1,0 +1,18 @@
+﻿<Properties StartupConfiguration="{590B61D8-2B60-41B0-B405-005414C8CCA8}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="ChartJS/SampleChartJsProgram.cs">
+    <Files>
+      <File FileName="ChartJS/Services/Builders/ChartBuilders/RadarChartBuilder.cs" Line="39" Column="23" />
+      <File FileName="ChartJS/Models/Scale.cs" Line="10" Column="1" />
+      <File FileName="ChartJS/Models/Options/RadarChart/RadarOptionsScale.cs" Line="8" Column="1" />
+      <File FileName="ChartJS/SampleChartJsProgram.cs" Line="184" Column="1" />
+      <File FileName="ChartJS/Services/Builders/ChartBuilders/ChartBuilder.cs" Line="1" Column="1" NotebookId="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.ChartJS PreferredExecutionTarget="MonoDevelop.Default" />
+</Properties>

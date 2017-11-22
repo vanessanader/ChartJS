@@ -1,0 +1,17 @@
+var CHART = document.getElementById("lineChart");
+Chart.defaults.scale.ticks.beginAtZero = true;
+var myChart = new Chart(CHART,{
+  type: "{type}",
+  data:{
+    labels: [{labels}],
+    datasets:[{
+      label:"{datasetlabel}",
+      backgroundColor: [
+                {backgroundcolor}
+            ],
+      borderWidth: {borderwidth},
+      data:[{datapoints}],
+    }]
+  },
+
+});
