@@ -43,7 +43,7 @@ namespace ChartJS.Services.Builders
 
         public LineDataStepsBuilder CreateLineChart()
         {
-            return new LineDataStepsBuilder();
+            return new LineDataStepsBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
         }
 
         public RadarDataStepsBuilder CreateRadarChart()

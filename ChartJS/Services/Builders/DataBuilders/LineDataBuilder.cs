@@ -5,6 +5,7 @@ using ChartJS.Services.DefaultValuesGenerator;
 using ChartJS.Services.Utility;
 using ChartJS.Services.Validators;
 using static ChartJS.Services.Builders.DataBuilders.ChartJS.Services.Builders.LineDataStepsBuilder;
+using ChartJS.Services.TemplateWriter;
 
 namespace ChartJS.Services.Builders.DataBuilders
 {
@@ -12,16 +13,22 @@ namespace ChartJS.Services.Builders.DataBuilders
 	{
 		public class LineDataStepsBuilder
 		{
-			readonly IRandomColorGenerator randomColorGenerator;
+            readonly IRandomColorGenerator randomColorGenerator;
+            readonly IChartValidator chartValidator;
+            readonly IJSTemplateWriter jsTemplateWriter;
+            readonly IDefaultChartGenerator defaultChartGenerator;
 
-			public LineDataStepsBuilder()
+            public LineDataStepsBuilder(IRandomColorGenerator randomColorGenerator, IChartValidator chartValidator, IJSTemplateWriter jsTemplateWriter, IDefaultChartGenerator defaultChartGenerator)
 			{
-				randomColorGenerator = new RandomColorGenerator();
-			}
+                this.randomColorGenerator = randomColorGenerator;
+                this.chartValidator = chartValidator;
+                this.jsTemplateWriter = jsTemplateWriter;
+                this.defaultChartGenerator = defaultChartGenerator;
+            }
 
 			public ICreateLineDataBuilderStep StartBuildingChartData()
 			{
-				return new LineDataBuilder(randomColorGenerator);
+				return new LineDataBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
 			}
 
 			public interface ICreateLineDataBuilderStep
@@ -38,13 +45,19 @@ namespace ChartJS.Services.Builders.DataBuilders
 
     public class LineDataBuilder : ICreateLineDataBuilderStep, ISetLineDataLabelsStep
     {
+        readonly IRandomColorGenerator randomColorGenerator;
+        readonly IChartValidator chartValidator;
+        readonly IJSTemplateWriter jsTemplateWriter;
+        readonly IDefaultChartGenerator defaultChartGenerator;
         protected Data<LineDataset> data;
 		protected int index = -1;
-		protected readonly IRandomColorGenerator randomColorGenerator;
 
-        public LineDataBuilder(IRandomColorGenerator randomColorGenerator)
+        public LineDataBuilder(IRandomColorGenerator randomColorGenerator, IChartValidator chartValidator, IJSTemplateWriter jsTemplateWriter, IDefaultChartGenerator defaultChartGenerator)
         {
             this.randomColorGenerator = randomColorGenerator;
+            this.chartValidator = chartValidator;
+            this.jsTemplateWriter = jsTemplateWriter;
+            this.defaultChartGenerator = defaultChartGenerator;
 
             data = new Data<LineDataset>
 			{
@@ -335,12 +348,6 @@ namespace ChartJS.Services.Builders.DataBuilders
 
         public LineChartBuilder CreateDataAndStartBuildingChart()
         {
-			var chartValidator = new ChartValidator();
-
-			var jsTemplateWriter = new JSTemplateWriter();
-
-			var defaultChartGenerator = new DefaultChartGenerator();
-
             return new LineChartBuilder(defaultChartGenerator, chartValidator, jsTemplateWriter, data);
         }
     }
