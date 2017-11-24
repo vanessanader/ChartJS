@@ -33,12 +33,12 @@ namespace ChartJS.Services.Builders
 
         public DoughnutDataStepsBuilder CreatePieChart()
         {
-            return new DoughnutDataStepsBuilder(true);
+            return new DoughnutDataStepsBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator, true);
         }
 
         public DoughnutDataStepsBuilder CreateDoughnutChart()
         {
-            return new DoughnutDataStepsBuilder();
+            return new DoughnutDataStepsBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
         }
 
         public LineDataStepsBuilder CreateLineChart()

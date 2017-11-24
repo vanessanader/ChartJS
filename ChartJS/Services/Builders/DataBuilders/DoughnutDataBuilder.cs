@@ -6,6 +6,7 @@ using ChartJS.Services.DefaultValuesGenerator;
 using ChartJS.Services.Utility;
 using ChartJS.Services.Validators;
 using static ChartJS.Services.Builders.DataBuilders.ChartJS.Services.Builders.DoughnutDataStepsBuilder;
+using ChartJS.Services.TemplateWriter;
 
 namespace ChartJS.Services.Builders.DataBuilders
 {
@@ -13,23 +14,29 @@ namespace ChartJS.Services.Builders.DataBuilders
 	{
 		public class DoughnutDataStepsBuilder
 		{
-			readonly IRandomColorGenerator randomColorGenerator;
-            bool IsPie;
+            readonly IRandomColorGenerator randomColorGenerator;
+            readonly IChartValidator chartValidator;
+            readonly IJSTemplateWriter jsTemplateWriter;
+            readonly IDefaultChartGenerator defaultChartGenerator;
+            bool isPie;
 
-			public DoughnutDataStepsBuilder(bool isPie = false)
+			public DoughnutDataStepsBuilder(IRandomColorGenerator randomColorGenerator, IChartValidator chartValidator, IJSTemplateWriter jsTemplateWriter,IDefaultChartGenerator defaultChartGenerator, bool isPie = false)
 			{
-				randomColorGenerator = new RandomColorGenerator();
-                IsPie = isPie;
+                this.randomColorGenerator = randomColorGenerator;
+                this.chartValidator = chartValidator;
+                this.jsTemplateWriter = jsTemplateWriter;
+                this.defaultChartGenerator = defaultChartGenerator;
+                this.isPie = isPie;
 			}
 
 			public ICreateDoughnutDataBuilderStep StartBuildingChartData()
 			{
-                if (IsPie)
+                if (isPie)
                 {
-                    return new DoughnutDataBuilder(randomColorGenerator, true);
+                    return new DoughnutDataBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator, true);
                 }
 
-                return new DoughnutDataBuilder(randomColorGenerator);
+                return new DoughnutDataBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
 			}
 
 			public interface ICreateDoughnutDataBuilderStep
@@ -46,16 +53,22 @@ namespace ChartJS.Services.Builders.DataBuilders
 
     public class DoughnutDataBuilder : ICreateDoughnutDataBuilderStep, ISetDoughnutDataLabelsStep
     {
+        readonly IRandomColorGenerator randomColorGenerator;
+        readonly IChartValidator chartValidator;
+        readonly IJSTemplateWriter jsTemplateWriter;
+        readonly IDefaultChartGenerator defaultChartGenerator;
         protected Data<DoughnutDataset> data;
 		protected int index = -1;
-		protected readonly IRandomColorGenerator randomColorGenerator;
-        readonly bool IsPie;
+        readonly bool isPie;
         string[] baseColorArray;
 
-        public DoughnutDataBuilder (IRandomColorGenerator randomColorGenerator, bool isPie = false)
+        public DoughnutDataBuilder (IRandomColorGenerator randomColorGenerator, IChartValidator chartValidator, IJSTemplateWriter jsTemplateWriter, IDefaultChartGenerator defaultChartGenerator, bool isPie = false)
         {
             this.randomColorGenerator = randomColorGenerator;
-            IsPie = isPie;
+            this.chartValidator = chartValidator;
+            this.jsTemplateWriter = jsTemplateWriter;
+            this.defaultChartGenerator = defaultChartGenerator;
+            this.isPie = isPie;
 
             data = new Data<DoughnutDataset>
 			{
@@ -180,13 +193,7 @@ namespace ChartJS.Services.Builders.DataBuilders
 
         public DoughnutChartBuilder CreateDataAndStartBuildingChart()
         {
-			var chartValidator = new ChartValidator();
-
-			var jsTemplateWriter = new JSTemplateWriter();
-
-			var defaultChartGenerator = new DefaultChartGenerator();
-
-            if(IsPie)
+            if(isPie)
             {
                 return new PieChartBuilder(defaultChartGenerator, chartValidator, jsTemplateWriter, data);
             }
