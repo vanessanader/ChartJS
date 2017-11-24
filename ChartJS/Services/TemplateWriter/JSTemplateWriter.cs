@@ -24,7 +24,6 @@ namespace ChartJS.Services
         public void OverwriteTemplate<T>(Chart<T> chart) where T :Dataset
         {
             overWrittenTemplate = overWrittenTemplate.Replace("{animation}", chart.Animation.ToString());
-
 			var chartJson = JsonConvert.SerializeObject
             (
                 chart,
