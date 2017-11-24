@@ -5,6 +5,7 @@ using ChartJS.Services.DefaultValuesGenerator;
 using ChartJS.Services.Utility;
 using ChartJS.Services.Validators;
 using static ChartJS.Services.Builders.DataBuilders.ChartJS.Services.Builders.RadarDataStepsBuilder;
+using ChartJS.Services.TemplateWriter;
 
 namespace ChartJS.Services.Builders.DataBuilders
 {
@@ -12,16 +13,22 @@ namespace ChartJS.Services.Builders.DataBuilders
 	{
 		public class RadarDataStepsBuilder
 		{
-			readonly IRandomColorGenerator randomColorGenerator;
+            readonly IRandomColorGenerator randomColorGenerator;
+            readonly IChartValidator chartValidator;
+            readonly IJSTemplateWriter jsTemplateWriter;
+            readonly IDefaultChartGenerator defaultChartGenerator;
 
-			public RadarDataStepsBuilder()
+			public RadarDataStepsBuilder(IRandomColorGenerator randomColorGenerator, IChartValidator chartValidator, IJSTemplateWriter jsTemplateWriter, IDefaultChartGenerator defaultChartGenerator)
 			{
-				randomColorGenerator = new RandomColorGenerator();
-			}
+                this.randomColorGenerator = randomColorGenerator;
+                this.chartValidator = chartValidator;
+                this.jsTemplateWriter = jsTemplateWriter;
+                this.defaultChartGenerator = defaultChartGenerator;
+            }
 
 			public ICreateRadarDataBuilderStep StartBuildingChartData()
 			{
-				return new RadarDataBuilder(randomColorGenerator);
+				return new RadarDataBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
 			}
 
 			public interface ICreateRadarDataBuilderStep
@@ -39,11 +46,17 @@ namespace ChartJS.Services.Builders.DataBuilders
     {
         protected Data<RadarDataset> data;
 		protected int index = -1;
-		protected readonly IRandomColorGenerator randomColorGenerator;
+        readonly IRandomColorGenerator randomColorGenerator;
+        readonly IChartValidator chartValidator;
+        readonly IJSTemplateWriter jsTemplateWriter;
+        readonly IDefaultChartGenerator defaultChartGenerator;
         string[] baseColorArray;
-        public RadarDataBuilder (IRandomColorGenerator randomColorGenerator) 
+        public RadarDataBuilder (IRandomColorGenerator randomColorGenerator, IChartValidator chartValidator, IJSTemplateWriter jsTemplateWriter, IDefaultChartGenerator defaultChartGenerator) 
         {
             this.randomColorGenerator = randomColorGenerator;
+            this.chartValidator = chartValidator;
+            this.jsTemplateWriter = jsTemplateWriter;
+            this.defaultChartGenerator = defaultChartGenerator;
 
             data = new Data<RadarDataset>
             {
@@ -326,12 +339,6 @@ namespace ChartJS.Services.Builders.DataBuilders
 
         public RadarChartBuilder CreateDataAndStartBuildingChart()
         {
-			var chartValidator = new ChartValidator();
-
-			var jsTemplateWriter = new JSTemplateWriter();
-
-			var defaultChartGenerator = new DefaultChartGenerator();
-
 			return new RadarChartBuilder(defaultChartGenerator, chartValidator, jsTemplateWriter, data);
         }
     }
