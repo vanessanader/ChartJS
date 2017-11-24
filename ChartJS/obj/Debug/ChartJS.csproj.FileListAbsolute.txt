@@ -38,3 +38,9 @@ C:/Users/mb97/Dropbox/Iskandar/ChartJS/ChartJS/obj/Debug/ChartJS.csproj.Generate
 /Users/iskandarchacra/Desktop/ChartJS Updated/ChartJS/bin/Debug/ChartJS.pdb
 /Users/iskandarchacra/Desktop/ChartJS Updated/ChartJS/bin/Debug/Newtonsoft.Json.dll
 /Users/iskandarchacra/Desktop/ChartJS Updated/ChartJS/bin/Debug/Newtonsoft.Json.xml
+C:\Users\iskan\source\repos\ChartJS\ChartJS\obj\Debug\ChartJS.csprojResolveAssemblyReference.cache
+C:\Users\iskan\source\repos\ChartJS\ChartJS\obj\Debug\ChartJS.Properties.Resources.resources
+C:\Users\iskan\source\repos\ChartJS\ChartJS\obj\Debug\ChartJS.csproj.GenerateResource.Cache
+C:\Users\iskan\source\repos\ChartJS\ChartJS\obj\Debug\ChartJS.csproj.CoreCompileInputs.cache
+C:\Users\iskan\source\repos\ChartJS\ChartJS\obj\Debug\ChartJS.exe
+C:\Users\iskan\source\repos\ChartJS\ChartJS\obj\Debug\ChartJS.pdb

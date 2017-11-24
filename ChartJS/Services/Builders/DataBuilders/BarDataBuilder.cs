@@ -9,28 +9,35 @@ namespace ChartJS.Services.Builders.DataBuilders
     using global::ChartJS.Services.DefaultValuesGenerator;
     using global::ChartJS.Services.Validators;
     using static global::ChartJS.Services.Builders.DataBuilders.ChartJS.Services.Builders.BarDataStepsBuilder;
+    using global::ChartJS.Services.TemplateWriter;
 
     namespace ChartJS.Services.Builders
 	{
 		public class BarDataStepsBuilder
 		{
-			readonly IRandomColorGenerator randomColorGenerator;
-            bool IsHorizontal;
+            readonly IRandomColorGenerator randomColorGenerator;
+            readonly IChartValidator chartValidator;
+            readonly IJSTemplateWriter jsTemplateWriter;
+            readonly IDefaultChartGenerator defaultChartGenerator;
+            readonly bool isHorizontal;
 
-			public BarDataStepsBuilder(bool isHorizontal = false)
+			public BarDataStepsBuilder(IRandomColorGenerator randomColorGenerator, IChartValidator chartValidator, IJSTemplateWriter jsTemplateWriter, IDefaultChartGenerator defaultChartGenerator, bool isHorizontal = false)
 			{
-				randomColorGenerator = new RandomColorGenerator();
-                IsHorizontal = isHorizontal;
+                this.randomColorGenerator = randomColorGenerator;
+                this.chartValidator = chartValidator;
+                this.jsTemplateWriter = jsTemplateWriter;
+                this.defaultChartGenerator = defaultChartGenerator;
+                this.isHorizontal = isHorizontal;
 			}
 
 			public ICreateBarDataBuilderStep StartBuildingChartData()
 			{
-                if (IsHorizontal)
+                if (isHorizontal)
                 {
-                    return new BarDataBuilder(randomColorGenerator, true);
+                    return new BarDataBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator, true);
                 }
 
-				return new BarDataBuilder(randomColorGenerator);
+				return new BarDataBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
 			}
 
 			public interface ICreateBarDataBuilderStep
@@ -47,16 +54,22 @@ namespace ChartJS.Services.Builders.DataBuilders
 
     public class BarDataBuilder : ICreateBarDataBuilderStep, ISetDataLabelsStep
     {
+        readonly IRandomColorGenerator randomColorGenerator;
+        readonly IChartValidator chartValidator;
+        readonly IJSTemplateWriter jsTemplateWriter;
+        readonly IDefaultChartGenerator defaultChartGenerator;
         protected Data<BarDataset> data;
 		protected int index = -1;
-		protected readonly IRandomColorGenerator randomColorGenerator;
-        readonly bool IsHorizontal;
+        readonly bool isHorizontal;
         string[] baseColorArray;
 
-		public BarDataBuilder(IRandomColorGenerator randomColorGenerator, bool isHorizontal = false)
+		public BarDataBuilder(IRandomColorGenerator randomColorGenerator, IChartValidator chartValidator, IJSTemplateWriter jsTemplateWriter, IDefaultChartGenerator defaultChartGenerator, bool isHorizontal = false)
         {
             this.randomColorGenerator = randomColorGenerator;
-            IsHorizontal = isHorizontal;
+            this.chartValidator = chartValidator;
+            this.jsTemplateWriter = jsTemplateWriter;
+            this.defaultChartGenerator = defaultChartGenerator;
+            this.isHorizontal = isHorizontal;
 
             data = new Data<BarDataset>
 			{
@@ -192,13 +205,7 @@ namespace ChartJS.Services.Builders.DataBuilders
 
         public BarChartBuilder CreateDataAndStartBuildingChart()
         {
-            var chartValidator = new ChartValidator();
-
-            var jsTemplateWriter = new JSTemplateWriter();
-
-            var defaultChartGenerator = new DefaultChartGenerator();
-
-            if (IsHorizontal)
+            if (isHorizontal)
             {
                 return new HorizontalBarChartBuilder(defaultChartGenerator, chartValidator, jsTemplateWriter, data);
             }

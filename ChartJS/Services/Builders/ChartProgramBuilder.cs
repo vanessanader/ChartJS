@@ -1,40 +1,57 @@
 ﻿using ChartJS.Services.Builders.DataBuilders.ChartJS.Services.Builders;
+using ChartJS.Services.DefaultValuesGenerator;
+using ChartJS.Services.TemplateWriter;
+using ChartJS.Services.Utility;
+using ChartJS.Services.Validators;
 
 namespace ChartJS.Services.Builders
 {
-    public static class ChartProgramBuilder
+    public class ChartProgramBuilder
     {
-        public static BarDataStepsBuilder CreateBarChart()
+        readonly IRandomColorGenerator randomColorGenerator;
+        readonly IChartValidator chartValidator;
+        readonly IJSTemplateWriter jsTemplateWriter;
+        readonly IDefaultChartGenerator defaultChartGenerator;
+
+        public ChartProgramBuilder(string javascriptFile)
         {
-            return new BarDataStepsBuilder();
+            randomColorGenerator = new RandomColorGenerator();
+            chartValidator = new ChartValidator();
+            jsTemplateWriter = new JSTemplateWriter(javascriptFile);
+            defaultChartGenerator = new DefaultChartGenerator();
         }
 
-        public static BarDataStepsBuilder CreateHorizontalBarChart()
+        public BarDataStepsBuilder CreateBarChart()
         {
-            return new BarDataStepsBuilder(true);
+            return new BarDataStepsBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
+        }
+
+        public BarDataStepsBuilder CreateHorizontalBarChart()
+        {
+            return new BarDataStepsBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator, true);
 		}
 
-        public static DoughnutDataStepsBuilder CreatePieChart()
+        public DoughnutDataStepsBuilder CreatePieChart()
         {
             return new DoughnutDataStepsBuilder(true);
         }
 
-        public static DoughnutDataStepsBuilder CreateDoughnutChart()
+        public DoughnutDataStepsBuilder CreateDoughnutChart()
         {
             return new DoughnutDataStepsBuilder();
         }
 
-        public static LineDataStepsBuilder CreateLineChart()
+        public LineDataStepsBuilder CreateLineChart()
         {
             return new LineDataStepsBuilder();
         }
 
-        public static RadarDataStepsBuilder CreateRadarChart()
+        public RadarDataStepsBuilder CreateRadarChart()
         {
             return new RadarDataStepsBuilder();
         }
 
-        public static BubbleDataStepsBuilder CreateBubbleChart()
+        public BubbleDataStepsBuilder CreateBubbleChart()
         {
             return new BubbleDataStepsBuilder();
         }
