@@ -7,6 +7,7 @@ using ChartJSLib;
 namespace ChartJS.Services.Builders.DataBuilders
 {
     using global::ChartJS.Services.DefaultValuesGenerator;
+    using global::ChartJS.Services.TemplateWriter;
     using global::ChartJS.Services.Validators;
     using static global::ChartJS.Services.Builders.DataBuilders.ChartJS.Services.Builders.BubbleDataStepsBuilder;
 
@@ -15,15 +16,21 @@ namespace ChartJS.Services.Builders.DataBuilders
         public class BubbleDataStepsBuilder
         {
             readonly IRandomColorGenerator randomColorGenerator;
+            readonly IChartValidator chartValidator;
+            readonly IJSTemplateWriter jsTemplateWriter;
+            readonly IDefaultChartGenerator defaultChartGenerator;
 
-            public BubbleDataStepsBuilder()
+            public BubbleDataStepsBuilder(IRandomColorGenerator randomColorGenerator, IChartValidator chartValidator, IJSTemplateWriter jsTemplateWriter, IDefaultChartGenerator defaultChartGenerator)
             {
-                randomColorGenerator = new RandomColorGenerator();
+                this.randomColorGenerator = randomColorGenerator;
+                this.chartValidator = chartValidator;
+                this.jsTemplateWriter = jsTemplateWriter;
+                this.defaultChartGenerator = defaultChartGenerator;
             }
 
             public ICreateBubbleDataBuilderStep StartBuildingChartData()
             {
-                return new BubbleDataBuilder(randomColorGenerator);
+                return new BubbleDataBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
             }
 
             public interface ICreateBubbleDataBuilderStep
@@ -40,15 +47,21 @@ namespace ChartJS.Services.Builders.DataBuilders
 
     public class BubbleDataBuilder : ICreateBubbleDataBuilderStep, ISetBubbleDataLabelsStep
     {
+        readonly IRandomColorGenerator randomColorGenerator;
+        readonly IChartValidator chartValidator;
+        readonly IJSTemplateWriter jsTemplateWriter;
+        readonly IDefaultChartGenerator defaultChartGenerator;
         protected Data<BubbleDataset> data;
 		protected int index = -1;
-		protected readonly IRandomColorGenerator randomColorGenerator;
 
-		public BubbleDataBuilder(IRandomColorGenerator randomColorGenerator)
+		public BubbleDataBuilder(IRandomColorGenerator randomColorGenerator, IChartValidator chartValidator, IJSTemplateWriter jsTemplateWriter, IDefaultChartGenerator defaultChartGenerator)
         {
             this.randomColorGenerator = randomColorGenerator;
+            this.chartValidator = chartValidator;
+            this.jsTemplateWriter = jsTemplateWriter;
+            this.defaultChartGenerator = defaultChartGenerator;
 
-			data = new Data<BubbleDataset>
+            data = new Data<BubbleDataset>
 			{
                 Datasets = new List<BubbleDataset>()
 			};
@@ -202,13 +215,7 @@ namespace ChartJS.Services.Builders.DataBuilders
 
         public BubbleChartBuilder CreateDataAndStartBuildingChart()
         {
-			var chartValidator = new ChartValidator();
-
-			var jsTemplateWriter = new JSTemplateWriter();
-
-			var defaultChartGenerator = new DefaultChartGenerator();
-
-            return new BubbleChartBuilder(defaultChartGenerator, chartValidator, jsTemplateWriter, data);
+			return new BubbleChartBuilder(defaultChartGenerator, chartValidator, jsTemplateWriter, data);
         }
     }
 }

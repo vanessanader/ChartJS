@@ -48,12 +48,12 @@ namespace ChartJS.Services.Builders
 
         public RadarDataStepsBuilder CreateRadarChart()
         {
-            return new RadarDataStepsBuilder();
+            return new RadarDataStepsBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
         }
 
         public BubbleDataStepsBuilder CreateBubbleChart()
         {
-            return new BubbleDataStepsBuilder();
+            return new BubbleDataStepsBuilder(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
         }
     }
 }
