@@ -12,9 +12,14 @@ namespace ChartJS.Services
 {
     public class JSTemplateWriter : IJSTemplateWriter
     {
-		const string Outfile = @"/Users/iskandarchacra/Desktop/Desktop2/Bdeir_Project/js/main.js";
+		readonly string javascriptFile;
         readonly string jsTemplate = ChartJS.Properties.Resources.jsTemplate;
         public string overWrittenTemplate = ChartJS.Properties.Resources.jsTemplate;
+
+        public JSTemplateWriter(string javascriptFile)
+        {
+            this.javascriptFile = javascriptFile;
+        }
 
         public void OverwriteTemplate<T>(Chart<T> chart) where T :Dataset
         {
@@ -36,7 +41,7 @@ namespace ChartJS.Services
 			);
 
             overWrittenTemplate = overWrittenTemplate.Replace("{chart}", chartJson);
-			File.WriteAllText(Outfile, overWrittenTemplate);
+			File.WriteAllText(javascriptFile, overWrittenTemplate);
         }
 	}
 }

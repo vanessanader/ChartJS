@@ -16,7 +16,7 @@ namespace ChartJSLib
 
 			var chartValidator = new ChartValidator();
 
-			var jsTemplateWriter = new JSTemplateWriter();
+			var jsTemplateWriter = new JSTemplateWriter(@"/Users/iskandarchacra/Desktop/chartjssample/js/main.js");
 
             var chartJsProgram = new SampleChartJsProgram(randomColorGenerator, chartValidator, jsTemplateWriter, defaultChartGenerator);
 
